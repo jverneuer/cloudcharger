@@ -1,0 +1,89 @@
+
+#include <Arduino.h>
+#include <Arduino_FreeRTOS.h>
+#include <queue.h>
+
+
+#define turnLedOffPriority ( tskIDLE_PRIORITY + 2 )
+#define turnLedOnPriority ( tskIDLE_PRIORITY + 1 )
+#define mainQUEUE_LENGTH 10
+
+static TaskHandle_t turnLedOffHandle = NULL;
+static TaskHandle_t turnLedOnHandle = NULL;
+static QueueHandle_t xQueue = NULL;
+
+
+struct batteryValues{
+    float value;
+    unsigned long batteryId;
+    char unit;
+};
+
+void turnLedOff(void * pvParameters){
+  struct batteryValues currentValue;
+  while (!Serial) {
+    vTaskDelay(1);
+  }
+  for (;;){
+    if (xQueueReceive(xQueue, &currentValue, portMAX_DELAY) == pdPASS) {
+      Serial.print("currentValue.value");
+      digitalWrite(LED_BUILTIN, LOW); 
+    }
+  }
+}
+
+void turnLedOn(void * pvParameters){
+  for (;;){
+    digitalWrite(LED_BUILTIN, HIGH);
+    struct batteryValues currentValue;
+    currentValue.value = 1;
+
+    xQueueSend(xQueue, &currentValue, portMAX_DELAY);
+    /*send */
+    vTaskDelay( 100 / portTICK_PERIOD_MS );
+  }
+}
+
+
+
+void setup() {
+  Serial.begin(9600);
+  delay(300);
+        Serial.print("loop");
+
+  xQueue = xQueueCreate( mainQUEUE_LENGTH, sizeof(struct  batteryValues *) );
+  if( xQueue == NULL ){
+        Serial.println("Failed to create main Queue");
+  }
+
+  xTaskCreate(turnLedOff,
+            "ledOff",
+            64,
+            NULL, 
+            turnLedOffPriority,
+            &turnLedOffHandle);
+
+  xTaskCreate(turnLedOn,
+            "ledOnn",
+            64,
+            NULL, 
+            turnLedOnPriority,
+            &turnLedOnHandle);
+
+    
+  /* Start the tasks and timer running. */
+  /* vTaskStartScheduler(); */
+
+
+
+  /* pinMode(LED_BUILTIN, OUTPUT); */
+}
+
+
+void loop() {
+    /* Create the queue. */
+      Serial.print("loop");
+
+}
+
+
