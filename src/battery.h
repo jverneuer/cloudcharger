@@ -37,9 +37,10 @@ class Battery {
             };
         };
     public:
-        void recordMesurenment(char chargingSlot, float voltage, float current);
-        void setInternalResistance(char chargingSlot, float res);
-        void setId(char chargingSlot, unsigned long id);
+        void recordMesurenment( float voltage, float current);
+        void setInternalResistance( float res);
+        void setId( unsigned long id);
+
 };
 
 #endif
