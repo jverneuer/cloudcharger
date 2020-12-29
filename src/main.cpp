@@ -4,6 +4,8 @@
 #include <queue.h>
 #include <Wire.h>
 #include <Adafruit_INA219.h>
+#include <battery.h>
+
 
 
 #define turnLedOffPriority ( tskIDLE_PRIORITY + 2 )
@@ -21,10 +23,6 @@ struct batteryValues{
     unsigned long batteryId;
     char unit;
 };
-
-void p(String  data){
-  Serial.println(data);
-}
 
 
 void turnLedOff(void * pvParameters){
@@ -117,20 +115,3 @@ void setup() {
 
 
 void loop() {}
-
-class main
-{
-private:
-  /* data */
-public:
-  main(/* args */);
-  ~main();
-};
-
-main::main(/* args */)
-{
-}
-
-main::~main()
-{
-}
