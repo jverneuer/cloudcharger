@@ -35,7 +35,6 @@ void MuxManager::init(ioMode mode){
 // can be done more elegant or by sledgehammer using a mapping tablke like demonstrated here.
 
 void MuxManager::setChannel(int channel){
-    init(read);
     // channel adress mapping
     int muxChannel[16][4]={
         {LOW,LOW,LOW,LOW}, //channel 0
@@ -64,15 +63,15 @@ void MuxManager::setChannel(int channel){
 // reads the value at the given Channel and returns a digital Value
 // could be extended to support Analog reads 
 int MuxManager::readPin(int channel){
+    init(read);
     setChannel(channel);
-    setMode(read);
     return digitalRead(ioPin);
 };
 
 // sets the data pin on the given channel
 void MuxManager::writePin(int channel, int data){
+    init(write);
     setChannel(channel);
-    setMode(write);
     digitalWrite(ioPin, data);
 }
 // shorthand for readPin
