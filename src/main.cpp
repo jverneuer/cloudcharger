@@ -3,7 +3,7 @@
 #include <battery.h>
 #include <muxManager.h>
 
-MuxManager mesurenmentSelector(mux1DataPins, mux1WriteEnablePin, mux1IoPin); 
+MuxManager mesurenmentSelector = MuxManager(mux1DataPins, mux1WriteEnablePin, mux1IoPin);
 
 void turnLedOff(void * pvParameters){
   for (;;){
@@ -39,7 +39,9 @@ void ina219Test(void * pvParameters){
 
 
 void setup() {
-
+  mesurenmentSelector.w(3, LOW);
+  delay(500);
+  mesurenmentSelector.w(1, HIGH);
   Serial.begin(9600);
   while (!Serial) { }
   ina219.setCalibration_32V_2A ();
