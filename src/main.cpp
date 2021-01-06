@@ -3,6 +3,8 @@
 #include <battery.h>
 #include <muxManager.h>
 
+MuxManager mesurenmentSelector(mux1DataPins, mux1WriteEnablePin, mux1IoPin); 
+
 void turnLedOff(void * pvParameters){
   for (;;){
     struct batteryValues val;
@@ -37,6 +39,7 @@ void ina219Test(void * pvParameters){
 
 
 void setup() {
+
   Serial.begin(9600);
   while (!Serial) { }
   ina219.setCalibration_32V_2A ();
@@ -69,10 +72,6 @@ void setup() {
   /* Start the tasks and timer running. */
    vTaskStartScheduler(); 
 
-  pinMode(A2, OUTPUT); 
-
-
-  pinMode(A0, OUTPUT); 
 }
 
 

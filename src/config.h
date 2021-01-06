@@ -3,7 +3,7 @@
 #include <Arduino_FreeRTOS.h>
 #include <queue.h>
 
-#define unsigned char	chargingslots = 4; 
+unsigned char chargingslots = 4; 
 #define highPriority ( tskIDLE_PRIORITY + 2 )
 #define mediumPriority ( tskIDLE_PRIORITY + 1 )
 #define mainQUEUE_LENGTH 10
