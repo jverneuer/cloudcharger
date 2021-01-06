@@ -1,29 +1,7 @@
-
-#include <Arduino.h>
-#include <Arduino_FreeRTOS.h>
-#include <queue.h>
+#include <config.h>
 #include <Wire.h>
-#include <Adafruit_INA219.h>
 #include <battery.h>
-
-#define unsigned char	chargingslots = 4; 
-
-#define turnLedOffPriority ( tskIDLE_PRIORITY + 2 )
-#define turnLedOnPriority ( tskIDLE_PRIORITY + 1 )
-#define mainQUEUE_LENGTH 10
-
-static Adafruit_INA219 ina219;
-static TaskHandle_t turnLedOffHandle = NULL;
-static TaskHandle_t turnLedOnHandle = NULL;
-static QueueHandle_t xQueue = NULL;
-
-
-struct batteryValues{
-    float value;
-    unsigned long batteryId;
-    char unit;
-};
-
+#include <muxManager.h>
 
 void turnLedOff(void * pvParameters){
   for (;;){
@@ -53,29 +31,7 @@ void ina219Test(void * pvParameters){
       // ina not ready postpone 1 tick
       vTaskDelay(1);
     }
-    /*Serial.println("Busvoltage");
-    
-
-    Serial.println("getShuntVoltage_mV");
-    Serial.println(ina219.getShuntVoltage_mV() );
-
-
-    Serial.println("getPower_mW");
-    Serial.println(ina219.getPower_mW() );
-
-    Serial.println("getShuntVoltage_mV");
-    Serial.println(ina219.getShuntVoltage_mV() );
-    Serial.println("getCurrent_mA()");
-    Serial.println(ina219.getBusVoltage_V() );
-    Serial.println(ina219.getCurrent_mA());
-*/
-    Serial.println(ina219.getBusVoltage_V() );
-    Serial.println(ina219.getCurrent_mA());
-    digitalWrite(A2, HIGH);
     vTaskDelay( 500 / portTICK_PERIOD_MS );    
-    digitalWrite(A2, HIGH);
-    vTaskDelay( 500 / portTICK_PERIOD_MS );    
-
   }
 }
 
@@ -93,21 +49,21 @@ void setup() {
             "ledOff",
             256,
             NULL, 
-            turnLedOffPriority,
+            highPriority,
             &turnLedOffHandle);
 
   xTaskCreate(turnLedOn,
             "ledOnn",
             256,
             NULL, 
-            turnLedOffPriority,
+            highPriority,
             &turnLedOnHandle);
 
     xTaskCreate(ina219Test,
             "ina219Test",
             256,
             NULL, 
-            turnLedOffPriority,
+            highPriority,
             &turnLedOffHandle);
 
   /* Start the tasks and timer running. */
