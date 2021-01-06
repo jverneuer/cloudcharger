@@ -5,7 +5,7 @@
 class Battery {
     private:
         unsigned long id;
-        char chargingSlot;
+        unsigned char chargingSlot;
         /* keeping most values as short to convert later to floats on the getter 
         The ina chips produce 2 digits voltage readings multiplied by 100 the values are handled as shorts.
         A short takes half the memory than a float.

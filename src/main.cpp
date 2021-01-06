@@ -6,7 +6,7 @@
 #include <Adafruit_INA219.h>
 #include <battery.h>
 
-
+#define unsigned char	chargingslots = 4; 
 
 #define turnLedOffPriority ( tskIDLE_PRIORITY + 2 )
 #define turnLedOnPriority ( tskIDLE_PRIORITY + 1 )
@@ -69,8 +69,13 @@ void ina219Test(void * pvParameters){
     Serial.println(ina219.getBusVoltage_V() );
     Serial.println(ina219.getCurrent_mA());
 */
+    Serial.println(ina219.getBusVoltage_V() );
     Serial.println(ina219.getCurrent_mA());
-    vTaskDelay( 100 / portTICK_PERIOD_MS );
+    digitalWrite(A2, HIGH);
+    vTaskDelay( 500 / portTICK_PERIOD_MS );    
+    digitalWrite(A2, HIGH);
+    vTaskDelay( 500 / portTICK_PERIOD_MS );    
+
   }
 }
 
@@ -108,6 +113,7 @@ void setup() {
   /* Start the tasks and timer running. */
    vTaskStartScheduler(); 
 
+  pinMode(A2, OUTPUT); 
 
 
   pinMode(A0, OUTPUT); 
